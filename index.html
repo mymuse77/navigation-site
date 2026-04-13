@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>本地导航站</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #2A2015;
+    --ink-soft: #3D342A;
+    --ink-muted: #8A7D70;
+    --primary: #C4552A;
+    --primary-light: #FDF0EA;
+    --teal: #5A7F5C;
+    --teal-light: #EDF4EE;
+    --amber: #B8862D;
+    --amber-light: #FBF3E0;
+    --border: #D9D0C5;
+    --bg: #F7F4F0;
+    --surface: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: linear-gradient(160deg, #F7F4F0 0%, #EDE8E0 50%, #F2EDE6 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .page-header {
+    text-align: center;
+    padding: 64px 24px 48px;
+    position: relative;
+  }
+
+  .page-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 2px;
+  }
+
+  .site-title {
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .site-subtitle {
+    font-size: 1rem;
+    color: var(--ink-muted);
+    font-weight: 300;
+    letter-spacing: 0.08em;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--card-accent, var(--primary));
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(42, 32, 21, 0.1);
+    border-color: var(--card-accent, var(--primary));
+  }
+
+  .card:hover::before {
+    opacity: 1;
+  }
+
+  .card-port {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--surface);
+    background: var(--card-accent, var(--primary));
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    width: fit-content;
+    letter-spacing: 0.05em;
+  }
+
+  .card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+
+  .card-desc {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    font-weight: 300;
+    line-height: 1.6;
+    flex-grow: 1;
+  }
+
+  .card-footer {
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .card-footer::after {
+    content: '→';
+    margin-left: 4px;
+    transition: transform 0.2s ease;
+  }
+
+  .card:hover .card-footer::after {
+    transform: translateX(3px);
+  }
+
+  /* 每个卡片的accent色 */
+  .card:nth-child(1) { --card-accent: #C4552A; }
+  .card:nth-child(2) { --card-accent: #5A7F5C; }
+  .card:nth-child(3) { --card-accent: #B8862D; }
+  .card:nth-child(4) { --card-accent: #3A6E8F; }
+  .card:nth-child(5) { --card-accent: #7B5EA7; }
+  .card:nth-child(6) { --card-accent: #C4552A; }
+  .card:nth-child(7) { --card-accent: #5A7F5C; }
+  .card:nth-child(8) { --card-accent: #B8862D; }
+  .card:nth-child(9) { --card-accent: #3A6E8F; }
+
+  .page-footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--ink-muted);
+    font-size: 0.8rem;
+    font-weight: 300;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  @media (max-width: 600px) {
+    .site-title { font-size: 1.8rem; }
+    .grid { grid-template-columns: 1fr; }
+    .container { padding: 32px 16px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <h1 class="site-title">本地导航站</h1>
+  <p class="site-subtitle">192.168.31.130 · 服务入口</p>
+</header>
+
+<main class="container">
+  <div class="grid">
+
+    <a class="card" href="http://192.168.31.130:8001" target="_blank">
+      <span class="card-port">:8001</span>
+      <div class="card-title">AI-Native 工程师招聘面试官手册</div>
+      <div class="card-desc">易哈佛医疗 · 面试评分标准与 AI 驾驶能力实操考核</div>
+      <div class="card-footer">访问</div>
+    </a>
+
+    <a class="card" href="http://192.168.31.130:8002" target="_blank">
+      <span class="card-port">:8002</span>
+      <div class="card-title">环球美食星球</div>
+      <div class="card-desc">🍜 探索全球美食文化，数据可视化展示</div>
+      <div class="card-footer">访问</div>
+    </a>
+
+    <a class="card" href="http://192.168.31.130:8003" target="_blank">
+      <span class="card-port">:8003</span>
+      <div class="card-title">我的世界像素风 · 英语单词打怪游戏</div>
+      <div class="card-desc">游戏化背单词，像素风格闯关学习</div>
+      <div class="card-footer">访问</div>
+    </a>
+
+    <a class="card" href="http://192.168.31.130:8004" target="_blank">
+      <span class="card-port">:8004</span>
+      <div class="card-title">星际单词探险 StarWord Explorer</div>
+      <div class="card-desc">🚀 星际主题英语单词学习冒险游戏</div>
+      <div class="card-footer">访问</div>
+    </a>
+
+    <a class="card" href="http://192.168.31.130:8005" target="_blank">
+      <span class="card-port">:8005</span>
+      <div class="card-title">Zain & Zippo's Sky Adventure</div>
+      <div class="card-desc">☁️ 孩子的天空冒险互动游戏</div>
+      <div class="card-footer">访问</div>
+    </a>
+
+    <a class="card" href="http://192.168.31.130:8006" target="_blank">
+      <span class="card-port">:8006</span>
+      <div class="card-title">Phonetic Fun 音标学习</div>
+      <div class="card-desc">📖 趣味音标学习工具</div>
+      <div class="card-footer">访问</div>
+    </a>
+
+    <a class="card" href="http://192.168.31.130:8007" target="_blank">
+      <span class="card-port">:8007</span>
+      <div class="card-title">Superpower Test 能力测评</div>
+      <div class="card-desc">⚡ 个人能力倾向测评工具</div>
+      <div class="card-footer">访问</div>
+    </a>
+
+    <a class="card" href="http://192.168.31.130:8008" target="_blank">
+      <span class="card-port">:8008</span>
+      <div class="card-title">Score Scout 乐谱侦察兵</div>
+      <div class="card-desc">🎵 乐谱数据侦察与可视化</div>
+      <div class="card-footer">访问</div>
+    </a>
+
+    <a class="card" href="http://192.168.31.130:8009" target="_blank">
+      <span class="card-port">:8009</span>
+      <div class="card-title">中国博物馆公开数据分布图</div>
+      <div class="card-desc">🏛️ 全国博物馆数据地图 · museum-artifact</div>
+      <div class="card-footer">访问</div>
+    </a>
+
+  </div>
+</main>
+
+<footer class="page-footer">
+  本地导航站 · 2026 · mymuse77
+</footer>
+
+</body>
+</html>
